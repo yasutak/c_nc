@@ -3,6 +3,7 @@ from typing import List, Tuple, Dict
 import Mykytea
 import re
 import numpy as np
+import unittest
 
 def get_morphological_labels(corpus: List[str]) -> List[List[Tuple[str, str]]]:
     """
@@ -158,8 +159,6 @@ def build_cvalue_table(frequency_table: List[List[str]], containing_term_table: 
             cvalue_table[term] = np.log2(num_word) * (freqency - (1 / len(containing_words)) * total_fb)
     
     return cvalue_table
-
-    
 
 
 if __name__ == '__main__':
