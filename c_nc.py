@@ -57,7 +57,7 @@ def build_frequency_table(morphological_labels: List[List[str]], word_parts: Lis
         morphological_labels: list of morphological labels
         word_parts: A list of list of word_parts
     Returns:
-        A frequency table ouf word_parts in the form of {(word_part, word nums): frequency}
+        A frequency table ouf word_parts in the form of {word: (frequency, word_length)}
     """
     #TODO add katakana words
     #TODO add character-level matching of katakana
@@ -95,18 +95,18 @@ def build_frequency_table(morphological_labels: List[List[str]], word_parts: Lis
             word_parts_possible_term += word_part
             word_nums += 1
             if re_jp_term_filter.match(tags_possible_term) is not None:
-                possible_term_list.append((word_parts_possible_term, word_nums))
-                if (word_parts_possible_term, word_nums) in freq_table:
-                    freq_table[(word_parts_possible_term, word_nums)] += 1
+                possible_term_list.append(word_parts_possible_term)
+                if word_parts_possible_term in freq_table:
+                    freq_table[word_parts_possible_term] = [freq_table[word_parts_possible_term][0] + 1, freq_table[word_parts_possible_term][1]]
                 else:
-                    freq_table[(word_parts_possible_term, word_nums)] = 1
+                    freq_table[word_parts_possible_term] = [1, word_nums]
 
             if re_partial_jp_term_filter.match(tags_possible_term) is not None:
                     continue
             else:
                 # [('仮想関数', 2), ('仮想関数擬似乱数', 1), ('仮想関数擬似乱数系列', 0)]
                 for term, count in zip(possible_term_list, range(len(possible_term_list)-1, 0, -1)):
-                    freq_table[term] += count
+                    freq_table[term] = [freq_table[term][0] + count, freq_table[term][1]]
 
                 possible_term_list = []
                 tags_possible_term = ""
@@ -115,7 +115,8 @@ def build_frequency_table(morphological_labels: List[List[str]], word_parts: Lis
 
     return freq_table
 
-def build_subterm_table(freq_table: Dict[str, int]) -> Dict[str, List[str]]:
+
+def build_containing_term_table(freq_table: Dict[str, int]) -> Dict[str, List[str]]:
     """
     Returns a subterm table of the corpus.
 
@@ -125,32 +126,38 @@ def build_subterm_table(freq_table: Dict[str, int]) -> Dict[str, List[str]]:
         A subterm dictionary of {term: [subter1, subterm2, ...]}]} 
     """
     terms = freq_table.keys()
-    subterm_table = {}
+    containing_term_table = {}
     for term in terms:
-        subterm_table[term] = []
-        for sub_term in terms:
-            if term != sub_term and sub_term in term:
-                subterm_table[term].append(sub_term)
+        containing_term_table[term] = []
+        for containing_term in terms:
+            if term != containing_term and term in containing_term:
+                containing_term_table[term].append(containing_term)
     
-    return subterm_table
+    return containing_term_table
 
-def build_cvalue_table(frequency_table: List[List[str]], subterm_table: List[List[str]]) -> Dict[str, float]:
+def build_cvalue_table(frequency_table: List[List[str]], containing_term_table: List[List[str]]) -> Dict[str, float]:
     """
     Returns a cvalue table of the corpus.
 
     Args:
         freq_table: A frequency table of terms
-        subterm_table: A subterm table of terms
+        containing_term_table: A table of (term: [term1 containing term, term2 containing term, ...])
     Returns:
         A cvalue table of {term: cvalue}
     """
     cvalue_table = {}
     for term in frequency_table:
-        total_fb = sum((frequency_table[subterm] for subterm in subterm_table[term]))
-        len_a = len(subterm_table(term)) + 1
-        if len_a == 1:
-            cvalue_table[term] = np.log2()
-        c_value = np.log2(len_a) * (frequency_table[term] - (1/(len_a-1)))
+        
+        freqency, num_word = frequency_table[term]
+        containing_words = containing_term_table[term]
+        is_nested = (len(containing_words) > 0)
+        if not is_nested:
+            cvalue_table[term] = np.log2(num_word) * freqency
+        else:
+            total_fb = sum((frequency_table[containing_term][0] for containing_term in containing_term_table[term]))
+            cvalue_table[term] = np.log2(num_word) * (freqency - (1 / len(containing_words)) * total_fb)
+    
+    return cvalue_table
 
     
 
