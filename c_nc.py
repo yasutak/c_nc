@@ -57,9 +57,10 @@ def build_frequency_table(morphological_labels: List[List[str]], word_parts: Lis
         morphological_labels: list of morphological labels
         word_parts: A list of list of word_parts
     Returns:
-        A frequency table ouf word_parts
+        A frequency table ouf word_parts in the form of {(word_part, word nums): frequency}
     """
-    #TODO filter non-terms
+    #TODO add katakana words
+    #TODO add character-level matching of katakana
     re_jp_term_filter = re.compile(u"^(名詞){2,}$|(^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+)$|^((接頭辞)(名詞)+(接尾辞))$")
     re_partial_jp_term_filter = re.compile(u"^(名詞)+$|^((接頭辞)|(形容詞))$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+$|^(接頭辞)$|^(接頭辞)(名詞)+$|^((接頭辞)(名詞)+(接尾辞))$") 
     """
@@ -86,38 +87,71 @@ def build_frequency_table(morphological_labels: List[List[str]], word_parts: Lis
     for tags_in_sentence, word_parts_in_sentence in zip(morphological_labels, word_parts):
         tags_possible_term = ""
         word_parts_possible_term = ""
+        possible_term_list = []
+        word_nums = 0
+
         for tag, word_part in zip(tags_in_sentence, word_parts_in_sentence):
             tags_possible_term += tag
             word_parts_possible_term += word_part
+            word_nums += 1
             if re_jp_term_filter.match(tags_possible_term) is not None:
-                if word_parts_possible_term in freq_table:
-                    freq_table[word_parts_possible_term] += 1
+                possible_term_list.append((word_parts_possible_term, word_nums))
+                if (word_parts_possible_term, word_nums) in freq_table:
+                    freq_table[(word_parts_possible_term, word_nums)] += 1
                 else:
-                    freq_table[word_parts_possible_term] = 1
-            
+                    freq_table[(word_parts_possible_term, word_nums)] = 1
+
             if re_partial_jp_term_filter.match(tags_possible_term) is not None:
                     continue
             else:
+                # [('仮想関数', 2), ('仮想関数擬似乱数', 1), ('仮想関数擬似乱数系列', 0)]
+                for term, count in zip(possible_term_list, range(len(possible_term_list)-1, 0, -1)):
+                    freq_table[term] += count
+
+                possible_term_list = []
                 tags_possible_term = ""
                 word_parts_possible_term = ""
+                word_nums = 0
 
     return freq_table
 
-def calculate_c_value(words: List[str], nested: bool) -> List[float]:
+def build_subterm_table(freq_table: Dict[str, int]) -> Dict[str, List[str]]:
     """
-    Returns the C value for a candidate terminoloy.
+    Returns a subterm table of the corpus.
 
     Args:
-        word: a candidate terminoloy in more than one word.
-        nested: Whether the word is nested.
+        freq_table: A frequency table of word_parts
     Returns:
-        The C value for a word.
+        A subterm dictionary of {term: [subter1, subterm2, ...]}]} 
     """
-    if not nested:
-        return np.log2(len(words))
-        
-    else:
-        pass
+    terms = freq_table.keys()
+    subterm_table = {}
+    for term in terms:
+        subterm_table[term] = []
+        for sub_term in terms:
+            if term != sub_term and sub_term in term:
+                subterm_table[term].append(sub_term)
+    
+    return subterm_table
+
+def build_cvalue_table(frequency_table: List[List[str]], subterm_table: List[List[str]]) -> Dict[str, float]:
+    """
+    Returns a cvalue table of the corpus.
+
+    Args:
+        freq_table: A frequency table of terms
+        subterm_table: A subterm table of terms
+    Returns:
+        A cvalue table of {term: cvalue}
+    """
+    cvalue_table = {}
+    for term in frequency_table:
+        total_fb = sum((frequency_table[subterm] for subterm in subterm_table[term]))
+        len_a = len(subterm_table(term)) + 1
+        if len_a == 1:
+            cvalue_table[term] = np.log2()
+        c_value = np.log2(len_a) * (frequency_table[term] - (1/(len_a-1)))
+
     
 
 
@@ -125,20 +159,22 @@ if __name__ == '__main__':
     s = ["仮想関数", "擬似乱数系列", "非同期通信", "全二重接続", "再初期化", "未定義型"]
     print(get_morphological_labels(s))
     #assert get_morphological_labels(s) == [[['今日', '名詞']], [['は', '助詞']], [['い', '形容詞']], [['い', '語尾']], [['天気', '名詞']], [['で', '助動詞']], [['す', '語尾']], [['。', '補助記号']], [['1999', '名詞']], [['年', '名詞']]]
+    """
     assert build_frequency_table([['名詞', '名詞', '名詞', '名詞', '名詞', '接頭辞', \
             '名詞', '名詞', '接頭辞', '名詞', '名詞', '名詞', '接頭辞', '名詞', '接尾辞', \
             '接頭辞', '名詞', '接尾辞']], \
             [['仮想', '関数', '擬似', '乱数', '系列', \
             '非', '同期', '通信', '全', '二', '重', '接続', \
             '再', '初期', '化', '未', '定義', '型']]) == \
-            {'仮想関数': 1, \
-            '仮想関数擬似': 1,  \
-            '仮想関数擬似乱数': 1, \
+            {'仮想関数': 4, \
+            '仮想関数擬似': 3, \
+            '仮想関数擬似乱数': 2, \
             '仮想関数擬似乱数系列': 1, \
             '同期通信': 1, \
-            '二重': 1, \
-            '二重接続': 1,\
-            '未定義型': 1} \
+            '二重': 2, \
+            '二重接続': 1, \
+            '未定義型': 0} 
+    """
     assert japanese_filter_regex(["名詞", "名詞"])
     assert japanese_filter_regex(["名詞", "名詞"])
     assert japanese_filter_regex(["接頭辞", "名詞", "名詞"])
