@@ -5,7 +5,7 @@ import re
 import numpy as np
 import unittest
 
-def get_morphological_labels(corpus: List[str]) -> List[List[Tuple[str, str]]]:
+def get_morphological_labels(corpus: List[str]) -> Tuple[List[str], List[str]]:
     """
     Returns the morphological labels and its corresponding word parts of the corpus.
 
@@ -18,14 +18,18 @@ def get_morphological_labels(corpus: List[str]) -> List[List[Tuple[str, str]]]:
 
     opt = "-deftag UNKNOWN!!"
     mk = Mykytea.Mykytea(opt)
-    morphological_labels: List[str] = []
-    word_parts: List[str] = []
+    morphological_labels: List[List[str]] = []
+    word_parts: List[List[str]] = []
 
     for sentence in corpus:
+        morpho_labels_in_sentence = []
+        word_parts_in_sentence = []
         for result in mk.getTagsToString(sentence).split():
             word_part, tag = result.split("/")[:2]
-            word_parts.append(word_part)
-            morphological_labels.append(tag)
+            morpho_labels_in_sentence.append(tag)
+            word_parts_in_sentence.append(word_part)
+        morphological_labels.append(morpho_labels_in_sentence)
+        word_parts.append(word_parts_in_sentence)
 
     return morphological_labels, word_parts
 
@@ -136,16 +140,18 @@ def build_containing_term_table(freq_table: Dict[str, int]) -> Dict[str, List[st
     
     return containing_term_table
 
-def build_cvalue_table(frequency_table: List[List[str]], containing_term_table: List[List[str]]) -> Dict[str, float]:
+def build_cvalue_table(corpus: List[str]) -> Dict[str, float]:
     """
     Returns a cvalue table of the corpus.
 
     Args:
-        freq_table: A frequency table of terms
-        containing_term_table: A table of (term: [term1 containing term, term2 containing term, ...])
+        corpus: list of sentences
     Returns:
         A cvalue table of {term: cvalue}
     """
+    morphological_labels, word_parts = get_morphological_labels(corpus)
+    frequency_table = build_frequency_table(morphological_labels, word_parts)
+    containing_term_table = build_containing_term_table(frequency_table)
     cvalue_table = {}
     for term in frequency_table:
         
@@ -160,8 +166,34 @@ def build_cvalue_table(frequency_table: List[List[str]], containing_term_table: 
     
     return cvalue_table
 
+def get_context_words_table(corpus: List[str]) -> Dict[str, int()]:
+    """
+    Returns a context words table of the corpus.
+    
+    Args:
+        corpus: list of sentences
+    Returns:t
+        context words table of {context_word: number of terms it appears with}
+    """
+
+    morphological_labels, word_parts = get_morphological_labels(corpus)
+    term_table = get_frequency_table(morphological_labels, word_parts)
+    context_words_table = {}
+
+    
+
+
 
 if __name__ == '__main__':
+
+    text = ["""頼朝の死後、幕府に仕えた坂東武士（御家人）の権力闘争によって頼朝の嫡流は断絶し、
+    その後は北条氏による執権、やがて北条義時の嫡流である得宗が鎌倉幕府の実質的な支配者となった
+    武家政権は室町幕府・江戸幕府へと継承された。""", """植物は基本的には組織切片から全体を再生することができる。
+    例えばニンジンを5ミリメートル角程度に切り出し、エタノールなどにつけて消毒し、適切な培地に入れて適切な
+    （温度・日照などの）条件におけば胚・不定芽などを経て生育し、元のニンジン同様の形になる（組織培養）。"""]
+    cvalue_table = build_cvalue_table(text)
+    print(cvalue_table)
+
     s = ["仮想関数", "擬似乱数系列", "非同期通信", "全二重接続", "再初期化", "未定義型"]
     print(get_morphological_labels(s))
     #assert get_morphological_labels(s) == [[['今日', '名詞']], [['は', '助詞']], [['い', '形容詞']], [['い', '語尾']], [['天気', '名詞']], [['で', '助動詞']], [['す', '語尾']], [['。', '補助記号']], [['1999', '名詞']], [['年', '名詞']]]
