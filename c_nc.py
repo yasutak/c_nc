@@ -1,9 +1,8 @@
-import mypy
+import mypy/
 from typing import List, Tuple, Dict, Union
 import Mykytea
 import re
 import numpy as np
-import unittest
 
 def get_morphological_labels(corpus: List[str]) -> Tuple[List[str], List[str]]:
     """
@@ -52,7 +51,6 @@ def japanese_filter_regex(tags: List[str]) -> bool:
     re_jp_term_filter = re.compile(u"^(名詞){2,}$|(^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+)$|^((接頭辞)(名詞)+(接尾辞))$") # unicode
 
     return re_jp_term_filter.match(tags_concat) is not None # there is a match
-
 
 def build_frequency_table(morphological_labels: List[List[str]], word_parts: List[List[str]]) -> Dict[str, int]:
     """
@@ -183,7 +181,6 @@ def build_context_words_table(corpus: List[str]) -> Dict[str, List[Union[str, in
     term_table = build_frequency_table(morphological_labels, word_parts)
     term_total = len(term_table)
     context_words_table = {}
-    print(term_table)
 
     # add context words *after* the term
     for tags_in_sentence, word_parts_in_sentence in zip(morphological_labels, word_parts):
@@ -246,6 +243,7 @@ def build_context_factor_table(corpus: List[str]) -> Dict[str, float]:
         A context factor table of {term: context factor}
     """
     context_words_table = build_context_words_table(corpus)
+    morphological_labels, word_parts = get_morphological_labels(corpus)
     freq_table = build_frequency_table(morphological_labels, word_parts)
     num_terms = len(freq_table)
     inverse_context_words_table = {}
@@ -262,31 +260,40 @@ def build_context_factor_table(corpus: List[str]) -> Dict[str, float]:
         inverse_context_words_table[term] = sum(inverse_context_words_table[term])
     
     return inverse_context_words_table
-            
-    
 
-    for morphological_labels_in_sentence, word_parts_in_sentence in zip(morphological_labels, word_parts):
-        word_parts_total = len(word_parts_in_sentence)
-        for i in range(word_parts_total-1):
-            cur_word_part = word_parts_in_sentence[i]
-            cur_morphological_labels = morphological_labels_in_sentence[i]
-            next_word_part = word_parts_in_sentence[i+1]
-            next_morphological_labels = morphological_labels_in_sentence[i+1]
-            print(cur_word_part, cur_morphological_labels, next_word_part, next_morphological_labels)
-            
-            if (cur_word_part not in term_table and next_word_part in term_table):
-                if (cur_morphological_labels in ("名詞", "形容詞", "動詞")):
-                    if cur_word_part not in context_words_table:
-                        context_words_table[cur_word_part] = [next_word_part]
-                    elif next_word_part not in context_words_table[cur_word_part]:  # add unique terms
-                        context_words_table[cur_word_part].append(next_word_part)
-            elif (cur_word_part in term_table and next_word_part not in term_table):
-                if (cur_morphological_labels in ("名詞", "形容詞", "動詞")):
-                    if next_word_part not in context_words_table:
-                        context_words_table[next_word_part] = [cur_word_part]
-                    elif cur_word_part not in context_words_table[next_word_part]:
-                        context_words_table[next_word_part].append(cur_word_part)
-    return context_words_table
+def build_nc_value_table(corpus: List[str]) -> Dict[str, float]:
+    """
+    Returns a nc value table for each term.
+
+    Args:
+        corpus: list of sentences
+    Returns:
+        A nc value table of {term: nc value}
+    """
+    c_value_table = build_cvalue_table(corpus)
+    context_factor_table = build_context_factor_table(corpus)
+
+    nc_value_table = {}
+    for term in c_value_table:
+        if term not in context_factor_table:
+            nc_value_table[term] = 0.8 * c_value_table[term]
+        else:
+            nc_value_table[term] = 0.8 * c_value_table[term] + 0.2 * context_factor_table[term]
+    
+    return nc_value_table
+
+def get_kth_best_candidate_terms(corpus: List[str], k: int) -> List[str]:
+    """
+    Returns the kth best candidate terms.
+
+    Args:
+        k: the number of best candidate terms
+    Returns:
+        A list of k best candidate terms
+    """
+    nc_value_table = get_nc_value_table(corpus)
+    sorted_nc_value_table = sorted(nc_value_table.items(), key=lambda x: x[1], reverse=True)
+    return [term for term, nc_value in sorted_nc_value_table[:k]]
 
 if __name__ == '__main__':
 
