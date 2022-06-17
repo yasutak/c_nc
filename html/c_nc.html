@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>c_nc API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>c_nc</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># -*- coding: utf-8 -*-
+import mypy
+from typing import List, Tuple, Dict, Union
+import Mykytea
+import re
+import math
+
+def get_morphological_labels(corpus: List[str]) -&gt; Tuple[List[str], List[str]]:
+    &#34;&#34;&#34;
+    Returns the morphological labels and its corresponding word parts of the corpus.
+
+    Args:
+        corpus: list of sentences.
+    Returns:
+        morphological labels: list of morphological labels
+        word_parts: list of corresponding words parts
+    &#34;&#34;&#34;
+
+    opt = &#34;-deftag UNKNOWN!!&#34;
+    mk = Mykytea.Mykytea(opt)
+    morphological_labels: List[List[str]] = []
+    word_parts: List[List[str]] = []
+
+    for sentence in corpus:
+        morpho_labels_in_sentence = []
+        word_parts_in_sentence = []
+        for result in mk.getTagsToString(sentence).split():
+            word_part, tag = result.split(&#34;/&#34;)[:2]
+            morpho_labels_in_sentence.append(tag)
+            word_parts_in_sentence.append(word_part)
+        morphological_labels.append(morpho_labels_in_sentence)
+        word_parts.append(word_parts_in_sentence)
+
+    return morphological_labels, word_parts
+
+# just for testing purpose
+def japanese_filter_regex(tags: List[str]) -&gt; bool:
+    &#34;&#34;&#34;
+    Returns whether a word follows termilogy patters in Japanese.
+
+    Args:
+        words: A list of word and its tags.
+        tags: A list of tags.
+    Returns:
+        Whether the word is (probably) a terminology.
+    &#34;&#34;&#34;
+    tags_concat = &#34;&#34;.join(tags)
+
+    # filter1: Noun{2,}
+    # filter2: (Prefix | Adv) (Noun | Adj | Suffix)+ Noun+
+    # filter3: Prefix Noun+ Suffix
+
+    re_jp_term_filter = re.compile(u&#34;^(名詞){2,}$|(^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+)$|^((接頭辞)(名詞)+(接尾辞))$&#34;) # unicode
+
+    return re_jp_term_filter.match(tags_concat) is not None # there is a match
+
+# just for testing
+def partial_japanese_filter_regex(tags: List[str]) -&gt; bool:
+
+    tags_concat = &#34;&#34;.join(tags)
+    re_partial_jp_term_filter = re.compile(u&#34;^(名詞)+$|^((接頭辞)|(形容詞))$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+$|^(接頭辞)$|^(接頭辞)(名詞)+$|^((接頭辞)(名詞)+(接尾辞))$&#34;) 
+
+    return re_partial_jp_term_filter.match(tags_concat) is not None
+
+def build_frequency_table(morphological_labels: List[List[str]], word_parts: List[List[str]]) -&gt; Dict[str, int]:
+    &#34;&#34;&#34;
+    Returns a frequency table of the corpus.
+
+    Args:
+        morphological_labels: list of morphological labels
+        word_parts: A list of list of word_parts
+    Returns:
+        A frequency table ouf word_parts in the form of {word: (frequency, word_length)}
+    &#34;&#34;&#34;
+    #TODO add katakana words
+    #TODO add character-level matching of katakana
+    re_jp_term_filter = re.compile(u&#34;^(名詞){2,}$|(^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+)$|^((接頭辞)(名詞)+(接尾辞))$&#34;)
+    re_partial_jp_term_filter = re.compile(u&#34;^(名詞)+$|^((接頭辞)|(形容詞))$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+$|^(接頭辞)$|^(接頭辞)(名詞)+$|^((接頭辞)(名詞)+(接尾辞))$&#34;) 
+
+    freq_table = {}
+    for tags_in_sentence, word_parts_in_sentence in zip(morphological_labels, word_parts):
+        tags_possible_term = &#34;&#34;
+        word_parts_possible_term = &#34;&#34;
+        possible_term_list = []
+        word_nums = 0
+
+        for tag, word_part in zip(tags_in_sentence, word_parts_in_sentence):
+            tags_possible_term += tag
+            word_parts_possible_term += word_part
+            word_nums += 1
+            if re_jp_term_filter.match(tags_possible_term) is not None:
+                possible_term_list.append(word_parts_possible_term)
+                if word_parts_possible_term in freq_table:
+                    freq_table[word_parts_possible_term] = [freq_table[word_parts_possible_term][0] + 1, freq_table[word_parts_possible_term][1]]
+                else:
+                    freq_table[word_parts_possible_term] = [1, word_nums]
+
+            if re_partial_jp_term_filter.match(tags_possible_term) is not None:
+                    continue
+            else:
+                # [(&#39;仮想関数&#39;, 2), (&#39;仮想関数擬似乱数&#39;, 1), (&#39;仮想関数擬似乱数系列&#39;, 0)]
+                for term, count in zip(possible_term_list, range(len(possible_term_list)-1, 0, -1)):
+                    freq_table[term] = [freq_table[term][0] + count, freq_table[term][1]]
+
+                possible_term_list = []
+                tags_possible_term = &#34;&#34;
+                word_parts_possible_term = &#34;&#34;
+                word_nums = 0
+
+    return freq_table
+
+
+def build_containing_term_table(freq_table: Dict[str, int]) -&gt; Dict[str, List[str]]:
+    &#34;&#34;&#34;
+    Returns a subterm table of the corpus.
+
+    Args:
+        freq_table: A frequency table of word_parts
+    Returns:
+        A subterm dictionary of {term: [subter1, subterm2, ...]}]} 
+    &#34;&#34;&#34;
+    terms = freq_table.keys()
+    containing_term_table = {}
+    for term in terms:
+        containing_term_table[term] = []
+        for containing_term in terms:
+            if term != containing_term and term in containing_term:
+                containing_term_table[term].append(containing_term)
+    
+    return containing_term_table
+
+def build_cvalue_table(corpus: List[str]) -&gt; Dict[str, float]:
+    &#34;&#34;&#34;
+    Returns a cvalue table of the corpus.
+
+    Args:
+        corpus: list of sentences
+    Returns:
+        A cvalue table of {term: cvalue}
+    &#34;&#34;&#34;
+    morphological_labels, word_parts = get_morphological_labels(corpus)
+    frequency_table = build_frequency_table(morphological_labels, word_parts)
+    containing_term_table = build_containing_term_table(frequency_table)
+    cvalue_table = {}
+    for term in frequency_table:
+        
+        freqency, num_word = frequency_table[term]
+        containing_words = containing_term_table[term]
+        is_nested = (len(containing_words) &gt; 0)
+        if not is_nested:
+            cvalue_table[term] = math.log2(num_word) * freqency
+        else:
+            total_fb = sum((frequency_table[containing_term][0] for containing_term in containing_term_table[term]))
+            cvalue_table[term] = math.log2(num_word) * (freqency - (1 / len(containing_words)) * total_fb)
+    
+    return cvalue_table
+
+def build_context_words_table(corpus: List[str]) -&gt; Dict[str, List[Union[str, int]]]:
+    &#34;&#34;&#34;
+    Returns a context words table of the corpus.
+    
+    Args:
+        corpus: list of sentences
+    Returns:t
+        context words table of {context_word: list of lists of (term it appears with, its frequency)}
+    &#34;&#34;&#34;
+    #TODO: filter non-essential words like &#34;助詞&#34; before building context words table
+    re_jp_term_filter = re.compile(u&#34;^(名詞){2,}$|(^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+)$|^((接頭辞)(名詞)+(接尾辞))$&#34;)
+    re_partial_jp_term_filter = re.compile(u&#34;^(名詞)+$|^((接頭辞)|(形容詞))$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+$|^(接頭辞)$|^(接頭辞)(名詞)+$|^((接頭辞)(名詞)+(接尾辞))$&#34;) 
+
+    morphological_labels, word_parts = get_morphological_labels(corpus)
+    term_table = build_frequency_table(morphological_labels, word_parts)
+    term_total = len(term_table)
+    context_words_table = {}
+
+    # add context words *after* the term
+    for tags_in_sentence, word_parts_in_sentence in zip(morphological_labels, word_parts):
+        
+        word_parts_possible_term = &#34;&#34;
+        tags_possible_term = &#34;&#34;
+
+        for i in range(len(word_parts_in_sentence)-1):
+            cur_tag, cur_word_part = tags_in_sentence[i], word_parts_in_sentence[i]
+            next_tag, next_word_part = tags_in_sentence[i+1], word_parts_in_sentence[i+1]
+            
+            word_parts_possible_term += cur_word_part
+            tags_possible_term = cur_tag + next_tag
+            
+            if word_parts_possible_term in term_table and next_word_part not in term_table:
+                if next_tag in (&#34;名詞&#34;, &#34;形容詞&#34;, &#34;動詞&#34;):
+                    if word_parts_possible_term not in context_words_table:
+                        context_words_table[next_word_part] = [[word_parts_possible_term, 1]]
+                    elif word_parts_possible_term not in context_words_table[next_word_part]:
+                        context_words_table[next_word_part][1] += 1
+
+            if re_partial_jp_term_filter.match(tags_possible_term) is not None:
+                    continue
+            else:
+                tags_possible_term = &#34;&#34;
+                word_parts_possible_term = &#34;&#34;
+
+    # add context words *before* the term
+    for tags_in_sentence, word_parts_in_sentence in zip(morphological_labels, word_parts):
+        word_parts_possible_term = &#34;&#34;
+        tags_possible_term = &#34;&#34;
+        for i in range(len(word_parts_in_sentence)-1, 0, -1):
+            cur_tag, cur_word_part = tags_in_sentence[i], word_parts_in_sentence[i]
+            prev_tag, prev_word_part = tags_in_sentence[i-1], word_parts_in_sentence[i-1]
+            word_parts_possible_term = cur_word_part + word_parts_possible_term
+            tags_possible_term = cur_tag + tags_possible_term
+
+            if word_parts_possible_term in term_table and prev_word_part not in term_table:
+                if next_tag in (&#34;名詞&#34;, &#34;形容詞&#34;, &#34;動詞&#34;):
+                    if word_parts_possible_term not in context_words_table:
+                        context_words_table[prev_word_part] = [[word_parts_possible_term, 1]]
+                    elif word_parts_possible_term not in context_words_table[prev_word_part]:
+                        context_words_table[prev_word_part][1] += 1
+
+            if re_partial_jp_term_filter.match(tags_possible_term) is not None:
+                    continue
+            else:
+                tags_possible_term = &#34;&#34;
+                word_parts_possible_term = &#34;&#34;
+
+    return context_words_table
+
+def build_context_factor_table(corpus: List[str]) -&gt; Dict[str, float]:
+    &#34;&#34;&#34;
+    Returns a context factor table for each term.
+
+    Args:
+        corpus: list of sentences
+    Returns:
+        A context factor table of {term: context factor}
+    &#34;&#34;&#34;
+    context_words_table = build_context_words_table(corpus)
+    morphological_labels, word_parts = get_morphological_labels(corpus)
+    freq_table = build_frequency_table(morphological_labels, word_parts)
+    num_terms = len(freq_table)
+    inverse_context_words_table = {}
+
+    for context_word in context_words_table:
+        weight = len(context_words_table[context_word]) / num_terms
+        for term, num_frequency in context_words_table[context_word]:
+            if term not in inverse_context_words_table:
+                inverse_context_words_table[term] = [weight * num_frequency]
+            else:
+                inverse_context_words_table[term].append(weight * num_frequency)
+    
+    for term in inverse_context_words_table:
+        inverse_context_words_table[term] = sum(inverse_context_words_table[term])
+    
+    return inverse_context_words_table
+
+def build_nc_value_table(corpus: List[str]) -&gt; Dict[str, float]:
+    &#34;&#34;&#34;
+    Returns a nc value table for each term.
+
+    Args:
+        corpus: list of sentences
+    Returns:
+        A nc value table of {term: nc value}
+    &#34;&#34;&#34;
+    c_value_table = build_cvalue_table(corpus)
+    context_factor_table = build_context_factor_table(corpus)
+
+    nc_value_table = {}
+    for term in c_value_table:
+        if term not in context_factor_table:
+            nc_value_table[term] = 0.8 * c_value_table[term]
+        else:
+            nc_value_table[term] = 0.8 * c_value_table[term] + 0.2 * context_factor_table[term]
+    
+    return nc_value_table
+
+def get_kth_best_candidate_terms(corpus: List[str], k: int) -&gt; List[str]:
+    &#34;&#34;&#34;
+    Returns the kth best candidate terms.
+
+    Args:
+        k: the number of best candidate terms
+    Returns:
+        A list of k best candidate terms
+    &#34;&#34;&#34;
+    nc_value_table = build_nc_value_table(corpus)
+    sorted_nc_value_table = sorted(nc_value_table.items(), key=lambda x: x[1], reverse=True)
+    return [term for term, nc_value in sorted_nc_value_table[:k]]
+
+if __name__ == &#39;__main__&#39;:
+
+    text = [&#34;&#34;&#34;頼朝の死後、幕府に仕えた坂東武士（御家人）の権力闘争によって頼朝の嫡流は断絶し、
+    その後は北条氏による執権、やがて北条義時の嫡流である得宗が鎌倉幕府の実質的な支配者となった
+    武家政権は室町幕府・江戸幕府へと継承された。&#34;&#34;&#34;, &#34;&#34;&#34;植物は基本的には組織切片から全体を再生することができる。
+    例えばニンジンを5ミリメートル角程度に切り出し、エタノールなどにつけて消毒し、適切な培地に入れて適切な
+    （温度・日照などの）条件におけば胚・不定芽などを経て生育し、元のニンジン同様の形になる（組織培養）。&#34;&#34;&#34;]
+    k = 20
+    get_kth_best_candidate_terms(text, k)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="c_nc.build_containing_term_table"><code class="name flex">
+<span>def <span class="ident">build_containing_term_table</span></span>(<span>freq_table: Dict[str, int]) ‑> Dict[str, List[str]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a subterm table of the corpus.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>freq_table</code></strong></dt>
+<dd>A frequency table of word_parts</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A subterm dictionary of {term: [subter1, subterm2, &hellip;]}]}</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def build_containing_term_table(freq_table: Dict[str, int]) -&gt; Dict[str, List[str]]:
+    &#34;&#34;&#34;
+    Returns a subterm table of the corpus.
+
+    Args:
+        freq_table: A frequency table of word_parts
+    Returns:
+        A subterm dictionary of {term: [subter1, subterm2, ...]}]} 
+    &#34;&#34;&#34;
+    terms = freq_table.keys()
+    containing_term_table = {}
+    for term in terms:
+        containing_term_table[term] = []
+        for containing_term in terms:
+            if term != containing_term and term in containing_term:
+                containing_term_table[term].append(containing_term)
+    
+    return containing_term_table</code></pre>
+</details>
+</dd>
+<dt id="c_nc.build_context_factor_table"><code class="name flex">
+<span>def <span class="ident">build_context_factor_table</span></span>(<span>corpus: List[str]) ‑> Dict[str, float]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a context factor table for each term.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>corpus</code></strong></dt>
+<dd>list of sentences</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A context factor table of {term: context factor}</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def build_context_factor_table(corpus: List[str]) -&gt; Dict[str, float]:
+    &#34;&#34;&#34;
+    Returns a context factor table for each term.
+
+    Args:
+        corpus: list of sentences
+    Returns:
+        A context factor table of {term: context factor}
+    &#34;&#34;&#34;
+    context_words_table = build_context_words_table(corpus)
+    morphological_labels, word_parts = get_morphological_labels(corpus)
+    freq_table = build_frequency_table(morphological_labels, word_parts)
+    num_terms = len(freq_table)
+    inverse_context_words_table = {}
+
+    for context_word in context_words_table:
+        weight = len(context_words_table[context_word]) / num_terms
+        for term, num_frequency in context_words_table[context_word]:
+            if term not in inverse_context_words_table:
+                inverse_context_words_table[term] = [weight * num_frequency]
+            else:
+                inverse_context_words_table[term].append(weight * num_frequency)
+    
+    for term in inverse_context_words_table:
+        inverse_context_words_table[term] = sum(inverse_context_words_table[term])
+    
+    return inverse_context_words_table</code></pre>
+</details>
+</dd>
+<dt id="c_nc.build_context_words_table"><code class="name flex">
+<span>def <span class="ident">build_context_words_table</span></span>(<span>corpus: List[str]) ‑> Dict[str, List[Union[str, int]]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a context words table of the corpus.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>corpus</code></strong></dt>
+<dd>list of sentences</dd>
+</dl>
+<p>Returns:t
+context words table of {context_word: list of lists of (term it appears with, its frequency)}</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def build_context_words_table(corpus: List[str]) -&gt; Dict[str, List[Union[str, int]]]:
+    &#34;&#34;&#34;
+    Returns a context words table of the corpus.
+    
+    Args:
+        corpus: list of sentences
+    Returns:t
+        context words table of {context_word: list of lists of (term it appears with, its frequency)}
+    &#34;&#34;&#34;
+    #TODO: filter non-essential words like &#34;助詞&#34; before building context words table
+    re_jp_term_filter = re.compile(u&#34;^(名詞){2,}$|(^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+)$|^((接頭辞)(名詞)+(接尾辞))$&#34;)
+    re_partial_jp_term_filter = re.compile(u&#34;^(名詞)+$|^((接頭辞)|(形容詞))$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+$|^(接頭辞)$|^(接頭辞)(名詞)+$|^((接頭辞)(名詞)+(接尾辞))$&#34;) 
+
+    morphological_labels, word_parts = get_morphological_labels(corpus)
+    term_table = build_frequency_table(morphological_labels, word_parts)
+    term_total = len(term_table)
+    context_words_table = {}
+
+    # add context words *after* the term
+    for tags_in_sentence, word_parts_in_sentence in zip(morphological_labels, word_parts):
+        
+        word_parts_possible_term = &#34;&#34;
+        tags_possible_term = &#34;&#34;
+
+        for i in range(len(word_parts_in_sentence)-1):
+            cur_tag, cur_word_part = tags_in_sentence[i], word_parts_in_sentence[i]
+            next_tag, next_word_part = tags_in_sentence[i+1], word_parts_in_sentence[i+1]
+            
+            word_parts_possible_term += cur_word_part
+            tags_possible_term = cur_tag + next_tag
+            
+            if word_parts_possible_term in term_table and next_word_part not in term_table:
+                if next_tag in (&#34;名詞&#34;, &#34;形容詞&#34;, &#34;動詞&#34;):
+                    if word_parts_possible_term not in context_words_table:
+                        context_words_table[next_word_part] = [[word_parts_possible_term, 1]]
+                    elif word_parts_possible_term not in context_words_table[next_word_part]:
+                        context_words_table[next_word_part][1] += 1
+
+            if re_partial_jp_term_filter.match(tags_possible_term) is not None:
+                    continue
+            else:
+                tags_possible_term = &#34;&#34;
+                word_parts_possible_term = &#34;&#34;
+
+    # add context words *before* the term
+    for tags_in_sentence, word_parts_in_sentence in zip(morphological_labels, word_parts):
+        word_parts_possible_term = &#34;&#34;
+        tags_possible_term = &#34;&#34;
+        for i in range(len(word_parts_in_sentence)-1, 0, -1):
+            cur_tag, cur_word_part = tags_in_sentence[i], word_parts_in_sentence[i]
+            prev_tag, prev_word_part = tags_in_sentence[i-1], word_parts_in_sentence[i-1]
+            word_parts_possible_term = cur_word_part + word_parts_possible_term
+            tags_possible_term = cur_tag + tags_possible_term
+
+            if word_parts_possible_term in term_table and prev_word_part not in term_table:
+                if next_tag in (&#34;名詞&#34;, &#34;形容詞&#34;, &#34;動詞&#34;):
+                    if word_parts_possible_term not in context_words_table:
+                        context_words_table[prev_word_part] = [[word_parts_possible_term, 1]]
+                    elif word_parts_possible_term not in context_words_table[prev_word_part]:
+                        context_words_table[prev_word_part][1] += 1
+
+            if re_partial_jp_term_filter.match(tags_possible_term) is not None:
+                    continue
+            else:
+                tags_possible_term = &#34;&#34;
+                word_parts_possible_term = &#34;&#34;
+
+    return context_words_table</code></pre>
+</details>
+</dd>
+<dt id="c_nc.build_cvalue_table"><code class="name flex">
+<span>def <span class="ident">build_cvalue_table</span></span>(<span>corpus: List[str]) ‑> Dict[str, float]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a cvalue table of the corpus.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>corpus</code></strong></dt>
+<dd>list of sentences</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A cvalue table of {term: cvalue}</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def build_cvalue_table(corpus: List[str]) -&gt; Dict[str, float]:
+    &#34;&#34;&#34;
+    Returns a cvalue table of the corpus.
+
+    Args:
+        corpus: list of sentences
+    Returns:
+        A cvalue table of {term: cvalue}
+    &#34;&#34;&#34;
+    morphological_labels, word_parts = get_morphological_labels(corpus)
+    frequency_table = build_frequency_table(morphological_labels, word_parts)
+    containing_term_table = build_containing_term_table(frequency_table)
+    cvalue_table = {}
+    for term in frequency_table:
+        
+        freqency, num_word = frequency_table[term]
+        containing_words = containing_term_table[term]
+        is_nested = (len(containing_words) &gt; 0)
+        if not is_nested:
+            cvalue_table[term] = math.log2(num_word) * freqency
+        else:
+            total_fb = sum((frequency_table[containing_term][0] for containing_term in containing_term_table[term]))
+            cvalue_table[term] = math.log2(num_word) * (freqency - (1 / len(containing_words)) * total_fb)
+    
+    return cvalue_table</code></pre>
+</details>
+</dd>
+<dt id="c_nc.build_frequency_table"><code class="name flex">
+<span>def <span class="ident">build_frequency_table</span></span>(<span>morphological_labels: List[List[str]], word_parts: List[List[str]]) ‑> Dict[str, int]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a frequency table of the corpus.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>morphological_labels</code></strong></dt>
+<dd>list of morphological labels</dd>
+<dt><strong><code>word_parts</code></strong></dt>
+<dd>A list of list of word_parts</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A frequency table ouf word_parts in the form of {word: (frequency, word_length)}</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def build_frequency_table(morphological_labels: List[List[str]], word_parts: List[List[str]]) -&gt; Dict[str, int]:
+    &#34;&#34;&#34;
+    Returns a frequency table of the corpus.
+
+    Args:
+        morphological_labels: list of morphological labels
+        word_parts: A list of list of word_parts
+    Returns:
+        A frequency table ouf word_parts in the form of {word: (frequency, word_length)}
+    &#34;&#34;&#34;
+    #TODO add katakana words
+    #TODO add character-level matching of katakana
+    re_jp_term_filter = re.compile(u&#34;^(名詞){2,}$|(^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+)$|^((接頭辞)(名詞)+(接尾辞))$&#34;)
+    re_partial_jp_term_filter = re.compile(u&#34;^(名詞)+$|^((接頭辞)|(形容詞))$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+$|^(接頭辞)$|^(接頭辞)(名詞)+$|^((接頭辞)(名詞)+(接尾辞))$&#34;) 
+
+    freq_table = {}
+    for tags_in_sentence, word_parts_in_sentence in zip(morphological_labels, word_parts):
+        tags_possible_term = &#34;&#34;
+        word_parts_possible_term = &#34;&#34;
+        possible_term_list = []
+        word_nums = 0
+
+        for tag, word_part in zip(tags_in_sentence, word_parts_in_sentence):
+            tags_possible_term += tag
+            word_parts_possible_term += word_part
+            word_nums += 1
+            if re_jp_term_filter.match(tags_possible_term) is not None:
+                possible_term_list.append(word_parts_possible_term)
+                if word_parts_possible_term in freq_table:
+                    freq_table[word_parts_possible_term] = [freq_table[word_parts_possible_term][0] + 1, freq_table[word_parts_possible_term][1]]
+                else:
+                    freq_table[word_parts_possible_term] = [1, word_nums]
+
+            if re_partial_jp_term_filter.match(tags_possible_term) is not None:
+                    continue
+            else:
+                # [(&#39;仮想関数&#39;, 2), (&#39;仮想関数擬似乱数&#39;, 1), (&#39;仮想関数擬似乱数系列&#39;, 0)]
+                for term, count in zip(possible_term_list, range(len(possible_term_list)-1, 0, -1)):
+                    freq_table[term] = [freq_table[term][0] + count, freq_table[term][1]]
+
+                possible_term_list = []
+                tags_possible_term = &#34;&#34;
+                word_parts_possible_term = &#34;&#34;
+                word_nums = 0
+
+    return freq_table</code></pre>
+</details>
+</dd>
+<dt id="c_nc.build_nc_value_table"><code class="name flex">
+<span>def <span class="ident">build_nc_value_table</span></span>(<span>corpus: List[str]) ‑> Dict[str, float]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a nc value table for each term.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>corpus</code></strong></dt>
+<dd>list of sentences</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A nc value table of {term: nc value}</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def build_nc_value_table(corpus: List[str]) -&gt; Dict[str, float]:
+    &#34;&#34;&#34;
+    Returns a nc value table for each term.
+
+    Args:
+        corpus: list of sentences
+    Returns:
+        A nc value table of {term: nc value}
+    &#34;&#34;&#34;
+    c_value_table = build_cvalue_table(corpus)
+    context_factor_table = build_context_factor_table(corpus)
+
+    nc_value_table = {}
+    for term in c_value_table:
+        if term not in context_factor_table:
+            nc_value_table[term] = 0.8 * c_value_table[term]
+        else:
+            nc_value_table[term] = 0.8 * c_value_table[term] + 0.2 * context_factor_table[term]
+    
+    return nc_value_table</code></pre>
+</details>
+</dd>
+<dt id="c_nc.get_kth_best_candidate_terms"><code class="name flex">
+<span>def <span class="ident">get_kth_best_candidate_terms</span></span>(<span>corpus: List[str], k: int) ‑> List[str]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the kth best candidate terms.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>k</code></strong></dt>
+<dd>the number of best candidate terms</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A list of k best candidate terms</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_kth_best_candidate_terms(corpus: List[str], k: int) -&gt; List[str]:
+    &#34;&#34;&#34;
+    Returns the kth best candidate terms.
+
+    Args:
+        k: the number of best candidate terms
+    Returns:
+        A list of k best candidate terms
+    &#34;&#34;&#34;
+    nc_value_table = build_nc_value_table(corpus)
+    sorted_nc_value_table = sorted(nc_value_table.items(), key=lambda x: x[1], reverse=True)
+    return [term for term, nc_value in sorted_nc_value_table[:k]]</code></pre>
+</details>
+</dd>
+<dt id="c_nc.get_morphological_labels"><code class="name flex">
+<span>def <span class="ident">get_morphological_labels</span></span>(<span>corpus: List[str]) ‑> Tuple[List[str], List[str]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the morphological labels and its corresponding word parts of the corpus.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>corpus</code></strong></dt>
+<dd>list of sentences.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>morphological labels</code></dt>
+<dd>list of morphological labels</dd>
+<dt><code>word_parts</code></dt>
+<dd>list of corresponding words parts</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_morphological_labels(corpus: List[str]) -&gt; Tuple[List[str], List[str]]:
+    &#34;&#34;&#34;
+    Returns the morphological labels and its corresponding word parts of the corpus.
+
+    Args:
+        corpus: list of sentences.
+    Returns:
+        morphological labels: list of morphological labels
+        word_parts: list of corresponding words parts
+    &#34;&#34;&#34;
+
+    opt = &#34;-deftag UNKNOWN!!&#34;
+    mk = Mykytea.Mykytea(opt)
+    morphological_labels: List[List[str]] = []
+    word_parts: List[List[str]] = []
+
+    for sentence in corpus:
+        morpho_labels_in_sentence = []
+        word_parts_in_sentence = []
+        for result in mk.getTagsToString(sentence).split():
+            word_part, tag = result.split(&#34;/&#34;)[:2]
+            morpho_labels_in_sentence.append(tag)
+            word_parts_in_sentence.append(word_part)
+        morphological_labels.append(morpho_labels_in_sentence)
+        word_parts.append(word_parts_in_sentence)
+
+    return morphological_labels, word_parts</code></pre>
+</details>
+</dd>
+<dt id="c_nc.japanese_filter_regex"><code class="name flex">
+<span>def <span class="ident">japanese_filter_regex</span></span>(<span>tags: List[str]) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns whether a word follows termilogy patters in Japanese.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>words</code></strong></dt>
+<dd>A list of word and its tags.</dd>
+<dt><strong><code>tags</code></strong></dt>
+<dd>A list of tags.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Whether the word is (probably) a terminology.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def japanese_filter_regex(tags: List[str]) -&gt; bool:
+    &#34;&#34;&#34;
+    Returns whether a word follows termilogy patters in Japanese.
+
+    Args:
+        words: A list of word and its tags.
+        tags: A list of tags.
+    Returns:
+        Whether the word is (probably) a terminology.
+    &#34;&#34;&#34;
+    tags_concat = &#34;&#34;.join(tags)
+
+    # filter1: Noun{2,}
+    # filter2: (Prefix | Adv) (Noun | Adj | Suffix)+ Noun+
+    # filter3: Prefix Noun+ Suffix
+
+    re_jp_term_filter = re.compile(u&#34;^(名詞){2,}$|(^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+)$|^((接頭辞)(名詞)+(接尾辞))$&#34;) # unicode
+
+    return re_jp_term_filter.match(tags_concat) is not None # there is a match</code></pre>
+</details>
+</dd>
+<dt id="c_nc.partial_japanese_filter_regex"><code class="name flex">
+<span>def <span class="ident">partial_japanese_filter_regex</span></span>(<span>tags: List[str]) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def partial_japanese_filter_regex(tags: List[str]) -&gt; bool:
+
+    tags_concat = &#34;&#34;.join(tags)
+    re_partial_jp_term_filter = re.compile(u&#34;^(名詞)+$|^((接頭辞)|(形容詞))$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+$|^(接頭辞)$|^(接頭辞)(名詞)+$|^((接頭辞)(名詞)+(接尾辞))$&#34;) 
+
+    return re_partial_jp_term_filter.match(tags_concat) is not None</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="c_nc.build_containing_term_table" href="#c_nc.build_containing_term_table">build_containing_term_table</a></code></li>
+<li><code><a title="c_nc.build_context_factor_table" href="#c_nc.build_context_factor_table">build_context_factor_table</a></code></li>
+<li><code><a title="c_nc.build_context_words_table" href="#c_nc.build_context_words_table">build_context_words_table</a></code></li>
+<li><code><a title="c_nc.build_cvalue_table" href="#c_nc.build_cvalue_table">build_cvalue_table</a></code></li>
+<li><code><a title="c_nc.build_frequency_table" href="#c_nc.build_frequency_table">build_frequency_table</a></code></li>
+<li><code><a title="c_nc.build_nc_value_table" href="#c_nc.build_nc_value_table">build_nc_value_table</a></code></li>
+<li><code><a title="c_nc.get_kth_best_candidate_terms" href="#c_nc.get_kth_best_candidate_terms">get_kth_best_candidate_terms</a></code></li>
+<li><code><a title="c_nc.get_morphological_labels" href="#c_nc.get_morphological_labels">get_morphological_labels</a></code></li>
+<li><code><a title="c_nc.japanese_filter_regex" href="#c_nc.japanese_filter_regex">japanese_filter_regex</a></code></li>
+<li><code><a title="c_nc.partial_japanese_filter_regex" href="#c_nc.partial_japanese_filter_regex">partial_japanese_filter_regex</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

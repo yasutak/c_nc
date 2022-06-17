@@ -1,8 +1,9 @@
-import mypy/
+# -*- coding: utf-8 -*-
+import mypy
 from typing import List, Tuple, Dict, Union
 import Mykytea
 import re
-import numpy as np
+import math
 
 def get_morphological_labels(corpus: List[str]) -> Tuple[List[str], List[str]]:
     """
@@ -32,6 +33,7 @@ def get_morphological_labels(corpus: List[str]) -> Tuple[List[str], List[str]]:
 
     return morphological_labels, word_parts
 
+# just for testing purpose
 def japanese_filter_regex(tags: List[str]) -> bool:
     """
     Returns whether a word follows termilogy patters in Japanese.
@@ -52,6 +54,14 @@ def japanese_filter_regex(tags: List[str]) -> bool:
 
     return re_jp_term_filter.match(tags_concat) is not None # there is a match
 
+# just for testing
+def partial_japanese_filter_regex(tags: List[str]) -> bool:
+
+    tags_concat = "".join(tags)
+    re_partial_jp_term_filter = re.compile(u"^(名詞)+$|^((接頭辞)|(形容詞))$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+$|^(接頭辞)$|^(接頭辞)(名詞)+$|^((接頭辞)(名詞)+(接尾辞))$") 
+
+    return re_partial_jp_term_filter.match(tags_concat) is not None
+
 def build_frequency_table(morphological_labels: List[List[str]], word_parts: List[List[str]]) -> Dict[str, int]:
     """
     Returns a frequency table of the corpus.
@@ -66,26 +76,7 @@ def build_frequency_table(morphological_labels: List[List[str]], word_parts: Lis
     #TODO add character-level matching of katakana
     re_jp_term_filter = re.compile(u"^(名詞){2,}$|(^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+)$|^((接頭辞)(名詞)+(接尾辞))$")
     re_partial_jp_term_filter = re.compile(u"^(名詞)+$|^((接頭辞)|(形容詞))$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+$|^(接頭辞)$|^(接頭辞)(名詞)+$|^((接頭辞)(名詞)+(接尾辞))$") 
-    """
-    test string
-        名詞
-        名詞名詞
-        接頭辞接尾辞
-        接頭辞接尾辞名詞
-        接頭辞名詞
-        接頭辞名詞名詞
-        接頭辞副詞
-        接頭辞副詞名詞
-        接頭辞
-        接頭辞名詞
-        接頭辞名詞名詞
-        接頭辞名詞名詞接尾辞
-        形容詞
-        形容詞名詞
-        形容詞副詞
-        形容詞接尾辞
-        形容詞接尾辞名詞
-    """
+
     freq_table = {}
     for tags_in_sentence, word_parts_in_sentence in zip(morphological_labels, word_parts):
         tags_possible_term = ""
@@ -157,10 +148,10 @@ def build_cvalue_table(corpus: List[str]) -> Dict[str, float]:
         containing_words = containing_term_table[term]
         is_nested = (len(containing_words) > 0)
         if not is_nested:
-            cvalue_table[term] = np.log2(num_word) * freqency
+            cvalue_table[term] = math.log2(num_word) * freqency
         else:
             total_fb = sum((frequency_table[containing_term][0] for containing_term in containing_term_table[term]))
-            cvalue_table[term] = np.log2(num_word) * (freqency - (1 / len(containing_words)) * total_fb)
+            cvalue_table[term] = math.log2(num_word) * (freqency - (1 / len(containing_words)) * total_fb)
     
     return cvalue_table
 
@@ -291,7 +282,7 @@ def get_kth_best_candidate_terms(corpus: List[str], k: int) -> List[str]:
     Returns:
         A list of k best candidate terms
     """
-    nc_value_table = get_nc_value_table(corpus)
+    nc_value_table = build_nc_value_table(corpus)
     sorted_nc_value_table = sorted(nc_value_table.items(), key=lambda x: x[1], reverse=True)
     return [term for term, nc_value in sorted_nc_value_table[:k]]
 
@@ -302,32 +293,5 @@ if __name__ == '__main__':
     武家政権は室町幕府・江戸幕府へと継承された。""", """植物は基本的には組織切片から全体を再生することができる。
     例えばニンジンを5ミリメートル角程度に切り出し、エタノールなどにつけて消毒し、適切な培地に入れて適切な
     （温度・日照などの）条件におけば胚・不定芽などを経て生育し、元のニンジン同様の形になる（組織培養）。"""]
-    cvalue_table = build_cvalue_table(text)
-    print(cvalue_table)
-    print(build_context_words_table(text))
-    print(build_context_words_table(["的武家政権"]))
-
-    s = ["仮想関数", "擬似乱数系列", "非同期通信", "全二重接続", "再初期化", "未定義型"]
-    print(get_morphological_labels(s))
-    #assert get_morphological_labels(s) == [[['今日', '名詞']], [['は', '助詞']], [['い', '形容詞']], [['い', '語尾']], [['天気', '名詞']], [['で', '助動詞']], [['す', '語尾']], [['。', '補助記号']], [['1999', '名詞']], [['年', '名詞']]]
-    """
-    assert build_frequency_table([['名詞', '名詞', '名詞', '名詞', '名詞', '接頭辞', \
-            '名詞', '名詞', '接頭辞', '名詞', '名詞', '名詞', '接頭辞', '名詞', '接尾辞', \
-            '接頭辞', '名詞', '接尾辞']], \
-            [['仮想', '関数', '擬似', '乱数', '系列', \
-            '非', '同期', '通信', '全', '二', '重', '接続', \
-            '再', '初期', '化', '未', '定義', '型']]) == \
-            {'仮想関数': 4, \
-            '仮想関数擬似': 3, \
-            '仮想関数擬似乱数': 2, \
-            '仮想関数擬似乱数系列': 1, \
-            '同期通信': 1, \
-            '二重': 2, \
-            '二重接続': 1, \
-            '未定義型': 0} 
-    """
-    assert japanese_filter_regex(["名詞", "名詞"])
-    assert japanese_filter_regex(["名詞", "名詞"])
-    assert japanese_filter_regex(["接頭辞", "名詞", "名詞"])
-    assert japanese_filter_regex(["接頭辞", "名詞", "接尾辞"])
-    assert japanese_filter_regex(["接頭辞", "名詞", "名詞", "接尾辞"])
+    k = 20
+    get_kth_best_candidate_terms(text, k)

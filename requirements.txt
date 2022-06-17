@@ -1,0 +1,3 @@
+mypy=0.960
+mypy-extensions=0.4.3
+kytea=0.1.7
