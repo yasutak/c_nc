@@ -1,4 +1,14 @@
 # -*- coding: utf-8 -*-
+"""
+Implementation of C-value/NC-value algorithm for unsupervised recognition of
+Multi-word terms discussed in the following paper:
+
+Mima, H., & Ananiadou, S. (2000). 
+An application and e aluation of the C/NC-value approach 
+for the automatic term recognition of multi-word units in Japanese. *Terminology.*
+*International Journal of Theoretical and Applied Issues in Specialized Communication*
+"""
+
 import mypy
 from typing import List, Tuple, Dict, Union
 import Mykytea
@@ -39,10 +49,9 @@ def japanese_filter_regex(tags: List[str]) -> bool:
     Returns whether a word follows termilogy patters in Japanese.
 
     Args:
-        words: A list of word and its tags.
         tags: A list of tags.
     Returns:
-        Whether the word is (probably) a terminology.
+        Whether the word follows term pattern.
     """
     tags_concat = "".join(tags)
 
@@ -54,8 +63,17 @@ def japanese_filter_regex(tags: List[str]) -> bool:
 
     return re_jp_term_filter.match(tags_concat) is not None # there is a match
 
-# just for testing
+
 def partial_japanese_filter_regex(tags: List[str]) -> bool:
+    """
+    Returns whether a word follows (partial) termilogy patters in Japanese.
+    Used only for testing
+
+    Args:
+        tags: A list of tags.
+    Returns:
+        Whether the word follows term pattern partially.
+    """
 
     tags_concat = "".join(tags)
     re_partial_jp_term_filter = re.compile(u"^(名詞)+$|^((接頭辞)|(形容詞))$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+$|^(接頭辞)$|^(接頭辞)(名詞)+$|^((接頭辞)(名詞)+(接尾辞))$") 
