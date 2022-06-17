@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
 <title>c_nc API documentation</title>
-<meta name="description" content="Implementation of C-value/NC-value algorithm for unsupervised recognition of
-Multi-word terms discussed in the following paper: …" />
+<meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -23,27 +22,11 @@ Multi-word terms discussed in the following paper: …" />
 <h1 class="title">Module <code>c_nc</code></h1>
 </header>
 <section id="section-intro">
-<p>Implementation of C-value/NC-value algorithm for unsupervised recognition of
-Multi-word terms discussed in the following paper:</p>
-<p>Mima, H., &amp; Ananiadou, S. (2000).
-An application and e aluation of the C/NC-value approach
-for the automatic term recognition of multi-word units in Japanese. <em>Terminology.</em>
-<em>International Journal of Theoretical and Applied Issues in Specialized Communication</em></p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python"># -*- coding: utf-8 -*-
-&#34;&#34;&#34;
-Implementation of C-value/NC-value algorithm for unsupervised recognition of
-Multi-word terms discussed in the following paper:
-
-Mima, H., &amp; Ananiadou, S. (2000). 
-An application and e aluation of the C/NC-value approach 
-for the automatic term recognition of multi-word units in Japanese. *Terminology.*
-*International Journal of Theoretical and Applied Issues in Specialized Communication*
-&#34;&#34;&#34;
-
 import mypy
 from typing import List, Tuple, Dict, Union
 import Mykytea
@@ -84,9 +67,10 @@ def japanese_filter_regex(tags: List[str]) -&gt; bool:
     Returns whether a word follows termilogy patters in Japanese.
 
     Args:
+        words: A list of word and its tags.
         tags: A list of tags.
     Returns:
-        Whether the word follows term pattern.
+        Whether the word is (probably) a terminology.
     &#34;&#34;&#34;
     tags_concat = &#34;&#34;.join(tags)
 
@@ -98,17 +82,8 @@ def japanese_filter_regex(tags: List[str]) -&gt; bool:
 
     return re_jp_term_filter.match(tags_concat) is not None # there is a match
 
-
+# just for testing
 def partial_japanese_filter_regex(tags: List[str]) -&gt; bool:
-    &#34;&#34;&#34;
-    Returns whether a word follows (partial) termilogy patters in Japanese.
-    Used only for testing
-
-    Args:
-        tags: A list of tags.
-    Returns:
-        Whether the word follows term pattern partially.
-    &#34;&#34;&#34;
 
     tags_concat = &#34;&#34;.join(tags)
     re_partial_jp_term_filter = re.compile(u&#34;^(名詞)+$|^((接頭辞)|(形容詞))$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+$|^(接頭辞)$|^(接頭辞)(名詞)+$|^((接頭辞)(名詞)+(接尾辞))$&#34;) 
@@ -758,11 +733,13 @@ context words table of {context_word: list of lists of (term it appears with, it
 <div class="desc"><p>Returns whether a word follows termilogy patters in Japanese.</p>
 <h2 id="args">Args</h2>
 <dl>
+<dt><strong><code>words</code></strong></dt>
+<dd>A list of word and its tags.</dd>
 <dt><strong><code>tags</code></strong></dt>
 <dd>A list of tags.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>Whether the word follows term pattern.</p></div>
+<p>Whether the word is (probably) a terminology.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -772,9 +749,10 @@ context words table of {context_word: list of lists of (term it appears with, it
     Returns whether a word follows termilogy patters in Japanese.
 
     Args:
+        words: A list of word and its tags.
         tags: A list of tags.
     Returns:
-        Whether the word follows term pattern.
+        Whether the word is (probably) a terminology.
     &#34;&#34;&#34;
     tags_concat = &#34;&#34;.join(tags)
 
@@ -791,29 +769,12 @@ context words table of {context_word: list of lists of (term it appears with, it
 <span>def <span class="ident">partial_japanese_filter_regex</span></span>(<span>tags: List[str]) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Returns whether a word follows (partial) termilogy patters in Japanese.
-Used only for testing</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>tags</code></strong></dt>
-<dd>A list of tags.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>Whether the word follows term pattern partially.</p></div>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def partial_japanese_filter_regex(tags: List[str]) -&gt; bool:
-    &#34;&#34;&#34;
-    Returns whether a word follows (partial) termilogy patters in Japanese.
-    Used only for testing
-
-    Args:
-        tags: A list of tags.
-    Returns:
-        Whether the word follows term pattern partially.
-    &#34;&#34;&#34;
 
     tags_concat = &#34;&#34;.join(tags)
     re_partial_jp_term_filter = re.compile(u&#34;^(名詞)+$|^((接頭辞)|(形容詞))$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+$|^(接頭辞)$|^(接頭辞)(名詞)+$|^((接頭辞)(名詞)+(接尾辞))$&#34;) 
