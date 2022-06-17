@@ -1,5 +1,5 @@
 import mypy
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Union
 import Mykytea
 import re
 import numpy as np
@@ -166,23 +166,127 @@ def build_cvalue_table(corpus: List[str]) -> Dict[str, float]:
     
     return cvalue_table
 
-def get_context_words_table(corpus: List[str]) -> Dict[str, int()]:
+def build_context_words_table(corpus: List[str]) -> Dict[str, List[Union[str, int]]]:
     """
     Returns a context words table of the corpus.
     
     Args:
         corpus: list of sentences
     Returns:t
-        context words table of {context_word: number of terms it appears with}
+        context words table of {context_word: list of lists of (term it appears with, its frequency)}
     """
+    #TODO: filter non-essential words like "助詞" before building context words table
+    re_jp_term_filter = re.compile(u"^(名詞){2,}$|(^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+)$|^((接頭辞)(名詞)+(接尾辞))$")
+    re_partial_jp_term_filter = re.compile(u"^(名詞)+$|^((接頭辞)|(形容詞))$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+$|^((接頭辞)|(形容詞))((名詞)|(副詞)|(接尾辞))+(名詞)+$|^(接頭辞)$|^(接頭辞)(名詞)+$|^((接頭辞)(名詞)+(接尾辞))$") 
 
     morphological_labels, word_parts = get_morphological_labels(corpus)
-    term_table = get_frequency_table(morphological_labels, word_parts)
+    term_table = build_frequency_table(morphological_labels, word_parts)
+    term_total = len(term_table)
     context_words_table = {}
+    print(term_table)
 
+    # add context words *after* the term
+    for tags_in_sentence, word_parts_in_sentence in zip(morphological_labels, word_parts):
+        
+        word_parts_possible_term = ""
+        tags_possible_term = ""
+
+        for i in range(len(word_parts_in_sentence)-1):
+            cur_tag, cur_word_part = tags_in_sentence[i], word_parts_in_sentence[i]
+            next_tag, next_word_part = tags_in_sentence[i+1], word_parts_in_sentence[i+1]
+            
+            word_parts_possible_term += cur_word_part
+            tags_possible_term = cur_tag + next_tag
+            
+            if word_parts_possible_term in term_table and next_word_part not in term_table:
+                if next_tag in ("名詞", "形容詞", "動詞"):
+                    if word_parts_possible_term not in context_words_table:
+                        context_words_table[next_word_part] = [[word_parts_possible_term, 1]]
+                    elif word_parts_possible_term not in context_words_table[next_word_part]:
+                        context_words_table[next_word_part][1] += 1
+
+            if re_partial_jp_term_filter.match(tags_possible_term) is not None:
+                    continue
+            else:
+                tags_possible_term = ""
+                word_parts_possible_term = ""
+
+    # add context words *before* the term
+    for tags_in_sentence, word_parts_in_sentence in zip(morphological_labels, word_parts):
+        word_parts_possible_term = ""
+        tags_possible_term = ""
+        for i in range(len(word_parts_in_sentence)-1, 0, -1):
+            cur_tag, cur_word_part = tags_in_sentence[i], word_parts_in_sentence[i]
+            prev_tag, prev_word_part = tags_in_sentence[i-1], word_parts_in_sentence[i-1]
+            word_parts_possible_term = cur_word_part + word_parts_possible_term
+            tags_possible_term = cur_tag + tags_possible_term
+
+            if word_parts_possible_term in term_table and prev_word_part not in term_table:
+                if next_tag in ("名詞", "形容詞", "動詞"):
+                    if word_parts_possible_term not in context_words_table:
+                        context_words_table[prev_word_part] = [[word_parts_possible_term, 1]]
+                    elif word_parts_possible_term not in context_words_table[prev_word_part]:
+                        context_words_table[prev_word_part][1] += 1
+
+            if re_partial_jp_term_filter.match(tags_possible_term) is not None:
+                    continue
+            else:
+                tags_possible_term = ""
+                word_parts_possible_term = ""
+
+    return context_words_table
+
+def build_context_factor_table(corpus: List[str]) -> Dict[str, float]:
+    """
+    Returns a context factor table for each term.
+
+    Args:
+        corpus: list of sentences
+    Returns:
+        A context factor table of {term: context factor}
+    """
+    context_words_table = build_context_words_table(corpus)
+    freq_table = build_frequency_table(morphological_labels, word_parts)
+    num_terms = len(freq_table)
+    inverse_context_words_table = {}
+
+    for context_word in context_words_table:
+        weight = len(context_words_table[context_word]) / num_terms
+        for term, num_frequency in context_words_table[context_word]:
+            if term not in inverse_context_words_table:
+                inverse_context_words_table[term] = [weight * num_frequency]
+            else:
+                inverse_context_words_table[term].append(weight * num_frequency)
+    
+    for term in inverse_context_words_table:
+        inverse_context_words_table[term] = sum(inverse_context_words_table[term])
+    
+    return inverse_context_words_table
+            
     
 
-
+    for morphological_labels_in_sentence, word_parts_in_sentence in zip(morphological_labels, word_parts):
+        word_parts_total = len(word_parts_in_sentence)
+        for i in range(word_parts_total-1):
+            cur_word_part = word_parts_in_sentence[i]
+            cur_morphological_labels = morphological_labels_in_sentence[i]
+            next_word_part = word_parts_in_sentence[i+1]
+            next_morphological_labels = morphological_labels_in_sentence[i+1]
+            print(cur_word_part, cur_morphological_labels, next_word_part, next_morphological_labels)
+            
+            if (cur_word_part not in term_table and next_word_part in term_table):
+                if (cur_morphological_labels in ("名詞", "形容詞", "動詞")):
+                    if cur_word_part not in context_words_table:
+                        context_words_table[cur_word_part] = [next_word_part]
+                    elif next_word_part not in context_words_table[cur_word_part]:  # add unique terms
+                        context_words_table[cur_word_part].append(next_word_part)
+            elif (cur_word_part in term_table and next_word_part not in term_table):
+                if (cur_morphological_labels in ("名詞", "形容詞", "動詞")):
+                    if next_word_part not in context_words_table:
+                        context_words_table[next_word_part] = [cur_word_part]
+                    elif cur_word_part not in context_words_table[next_word_part]:
+                        context_words_table[next_word_part].append(cur_word_part)
+    return context_words_table
 
 if __name__ == '__main__':
 
@@ -193,6 +297,8 @@ if __name__ == '__main__':
     （温度・日照などの）条件におけば胚・不定芽などを経て生育し、元のニンジン同様の形になる（組織培養）。"""]
     cvalue_table = build_cvalue_table(text)
     print(cvalue_table)
+    print(build_context_words_table(text))
+    print(build_context_words_table(["的武家政権"]))
 
     s = ["仮想関数", "擬似乱数系列", "非同期通信", "全二重接続", "再初期化", "未定義型"]
     print(get_morphological_labels(s))
